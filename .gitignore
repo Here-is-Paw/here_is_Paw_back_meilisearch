@@ -59,4 +59,4 @@ out/
 
 docker-compose.yml.server
 
-meili_data
+#meili_data

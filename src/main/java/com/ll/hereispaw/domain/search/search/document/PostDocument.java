@@ -3,7 +3,9 @@ package com.ll.hereispaw.domain.search.search.document;
 import com.ll.hereispaw.domain.search.search.dto.request.PostEventDto;
 import lombok.Data;
 import lombok.NonNull;
+import lombok.extern.slf4j.Slf4j;
 
+@Slf4j
 @Data
 public class PostDocument{
     @NonNull

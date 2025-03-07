@@ -1,5 +1,6 @@
 package com.ll.hereispaw.global.config;
 
+import com.ll.hereispaw.domain.search.search.document.IndexName;
 import com.meilisearch.sdk.Client;
 import com.meilisearch.sdk.Config;
 import com.meilisearch.sdk.Index;
@@ -29,12 +30,12 @@ public class MeilisearchConfig {
         try {
             Index index;
             try {
-                index = client.index("post");
+                index = client.index(IndexName.POST.getIndexName());
                 index.getStats(); // 인덱스 존재 여부 확인
             } catch (MeilisearchException e) {
                 log.info("post 인덱스가 존재하지 않아 새로 생성합니다.");
-                client.createIndex("post");
-                index = client.index("post");
+                client.createIndex(IndexName.POST.getIndexName());
+                index = client.index(IndexName.POST.getIndexName());
             }
 
             HashMap<String, Integer> typoSettings = new HashMap<>();
