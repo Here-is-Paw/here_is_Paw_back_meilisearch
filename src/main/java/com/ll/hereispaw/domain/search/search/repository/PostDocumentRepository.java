@@ -9,6 +9,10 @@ public interface PostDocumentRepository {
 
     void save(PostDocument postDoc, String indexName);
 
+    void delete(PostDocument postDocument, String indexName);
+
+    void update(PostDocument postDocument, String indexName);
+
     void clear(String indexName);
 
     Searchable search(String indexName, SearchRequest searchRequest);

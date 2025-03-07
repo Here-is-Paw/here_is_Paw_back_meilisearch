@@ -28,6 +28,14 @@ public class PostDocumentService {
         postDocumentRepository.save(postDoc, indexName);
     }
 
+    public void delete(PostDocument postDoc, String indexName) {
+        postDocumentRepository.delete(postDoc, indexName);
+    }
+
+    public void update(PostDocument postDoc, String indexName) {
+        postDocumentRepository.update(postDoc, indexName);
+    }
+
     public void clear(String indexName) {
         postDocumentRepository.clear(indexName);
     }

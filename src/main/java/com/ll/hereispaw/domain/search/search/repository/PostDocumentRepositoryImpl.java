@@ -25,12 +25,20 @@ public class PostDocumentRepositoryImpl implements PostDocumentRepository {
 
     @Override
     public void save(PostDocument postDoc, String indexName) {
+        String jsonDocument = Ut.json.toString(postDoc);
+        getIndex(indexName).addDocuments(jsonDocument, "id");
+        log.info("문서 작성 완료");
+    }
 
-        log.debug("postDoc : {}", Ut.json.toString(postDoc));
+    @Override
+    public void delete(PostDocument postDocument, String indexName) {
+        getIndex(indexName).deleteDocument(postDocument.getId());
+        log.info("문서 삭제 완료");
+    }
 
-        getIndex(indexName).addDocuments(
-                Ut.json.toString(postDoc)
-        );
+    @Override
+    public void update(PostDocument postDocument, String indexName) {
+        save(postDocument, indexName);
     }
 
     @Override

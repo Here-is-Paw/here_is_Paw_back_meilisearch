@@ -18,7 +18,7 @@ import java.util.HashMap;
 @Slf4j
 @Configuration
 public class MeilisearchConfig {
-    @Value("$custom.site.meilisearchUrl}")
+    @Value("${custom.site.meilisearchUrl}")
     private String meilisearchUrl;
 
     @Bean

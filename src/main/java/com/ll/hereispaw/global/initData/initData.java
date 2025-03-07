@@ -1,5 +1,6 @@
 package com.ll.hereispaw.global.initData;
 
+import com.ll.hereispaw.domain.search.search.document.IndexName;
 import com.ll.hereispaw.domain.search.search.service.PostDocumentService;
 import jakarta.annotation.PostConstruct;
 import lombok.RequiredArgsConstructor;
@@ -12,6 +13,7 @@ import org.springframework.context.annotation.Profile;
 @RequiredArgsConstructor
 @Slf4j
 public class initData {
+
     private final PostDocumentService postDocumentService;
 
     @PostConstruct
@@ -23,6 +25,6 @@ public class initData {
 
     public void initTestData() {
         // 기존 데이터 초기화
-        postDocumentService.clear("post");
+        postDocumentService.clear(IndexName.POST.getIndexName());
     }
 }
