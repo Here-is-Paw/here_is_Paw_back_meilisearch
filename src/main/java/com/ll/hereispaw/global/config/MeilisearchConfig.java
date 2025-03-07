@@ -9,6 +9,7 @@ import com.meilisearch.sdk.model.Settings;
 import com.meilisearch.sdk.model.TypoTolerance;
 import jakarta.annotation.PostConstruct;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
@@ -17,15 +18,17 @@ import java.util.HashMap;
 @Slf4j
 @Configuration
 public class MeilisearchConfig {
+    @Value("$custom.site.meilisearchUrl}")
+    private String meilisearchUrl;
 
     @Bean
     public Client meilisearchClient() {
-        return new Client(new Config("http://localhost:7700", "masterKey"));
+        return new Client(new Config(meilisearchUrl, "masterKey"));
     }
 
     @PostConstruct
     private void settingMeilisearch() {
-        Client client = new Client(new Config("http://localhost:7700", "masterKey"));
+        Client client = new Client(new Config(meilisearchUrl, "masterKey"));
 
         try {
             Index index;
