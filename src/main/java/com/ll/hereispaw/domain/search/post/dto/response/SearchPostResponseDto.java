@@ -1,4 +1,4 @@
-package com.ll.hereispaw.domain.search.search.dto.response;
+package com.ll.hereispaw.domain.search.post.dto.response;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -9,18 +9,19 @@ import lombok.NonNull;
 @AllArgsConstructor
 @NoArgsConstructor
 public class SearchPostResponseDto {
-    @NonNull
-    private String id;
-
-    private long post_id;
+    private long id;
 
     @NonNull
     private String breed;
 
     @NonNull
+    private String pathUrl;
+
+    @NonNull
     private String location;
 
-    private int type; // 0 = 실종 1 = 발견
+    private double x;
+    private double y;
 
     private String etc;
 }

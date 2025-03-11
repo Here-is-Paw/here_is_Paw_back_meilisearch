@@ -1,6 +1,6 @@
 package com.ll.hereispaw.global.config;
 
-import com.ll.hereispaw.domain.search.search.document.IndexName;
+import com.ll.hereispaw.global.enums.IndexName;
 import com.meilisearch.sdk.Client;
 import com.meilisearch.sdk.Config;
 import com.meilisearch.sdk.Index;
@@ -31,14 +31,23 @@ public class MeilisearchConfig {
         Client client = new Client(new Config(meilisearchUrl, "masterKey"));
 
         try {
-            Index index;
+            Index missingIndex, findingIndex, memberIndex;
             try {
-                index = client.index(IndexName.POST.getIndexName());
-                index.getStats(); // 인덱스 존재 여부 확인
+                missingIndex = client.index(IndexName.MISSING.getIndexName());
+                findingIndex = client.index(IndexName.FINDING.getIndexName());
+                memberIndex = client.index(IndexName.MEMBER.getIndexName());
+
+                missingIndex.getStats(); // 인덱스 존재 여부 확인
+                findingIndex.getStats(); // 인덱스 존재 여부 확인
+                memberIndex.getStats(); // 인덱스 존재 여부 확인
             } catch (MeilisearchException e) {
                 log.info("post 인덱스가 존재하지 않아 새로 생성합니다.");
-                client.createIndex(IndexName.POST.getIndexName());
-                index = client.index(IndexName.POST.getIndexName());
+                client.createIndex(IndexName.MISSING.getIndexName());
+                client.createIndex(IndexName.FINDING.getIndexName());
+                client.createIndex(IndexName.MEMBER.getIndexName());
+                missingIndex = client.index(IndexName.MISSING.getIndexName());
+                findingIndex = client.index(IndexName.FINDING.getIndexName());
+                memberIndex = client.index(IndexName.MEMBER.getIndexName());
             }
 
             HashMap<String, Integer> typoSettings = new HashMap<>();
@@ -50,7 +59,9 @@ public class MeilisearchConfig {
 
 //            settings.setRankingRules(new String[]{"words", "typo", "proximity", "attribute", "sort", "exactness"});
 
-            index.updateSettings(settings);
+            missingIndex.updateSettings(settings);
+            findingIndex.updateSettings(settings);
+            memberIndex.updateSettings(settings);
             log.debug("📌 메일리서치 세팅 적용 완료");
 
         } catch (Exception e) {

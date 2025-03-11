@@ -1,6 +1,6 @@
-package com.ll.hereispaw.domain.search.search.document;
+package com.ll.hereispaw.domain.search.post.document;
 
-import com.ll.hereispaw.domain.search.search.dto.request.PostEventDto;
+import com.ll.hereispaw.domain.search.post.dto.request.PostEventDto;
 import lombok.Data;
 import lombok.NonNull;
 import lombok.extern.slf4j.Slf4j;
@@ -8,10 +8,10 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 @Data
 public class PostDocument{
-    @NonNull
-    private String id;
+    private long id;
 
-    private long post_id;
+    @NonNull
+    private String pathUrl;
 
     @NonNull
     private String breed;
@@ -19,16 +19,18 @@ public class PostDocument{
     @NonNull
     private String location;
 
-    private int type; // 0 = 실종 1 = 발견
+    private double x;
+    private double y;
 
     private String etc;
 
     public PostDocument(PostEventDto postEventDto) {
         this.id = postEventDto.getId();
-        this.post_id = postEventDto.getPost_id();
+        this.pathUrl = postEventDto.getPathUrl();
         this.breed = postEventDto.getBreed();
+        this.x = postEventDto.getX();
+        this.y = postEventDto.getY();
         this.location = postEventDto.getLocation();
-        this.type = postEventDto.getType();
         this.etc = postEventDto.getEtc();
     }
 }

@@ -1,7 +1,7 @@
 package com.ll.hereispaw.global.initData;
 
-import com.ll.hereispaw.domain.search.search.document.IndexName;
-import com.ll.hereispaw.domain.search.search.service.PostDocumentService;
+import com.ll.hereispaw.global.enums.IndexName;
+import com.ll.hereispaw.domain.search.post.service.PostDocumentService;
 import jakarta.annotation.PostConstruct;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -25,6 +25,7 @@ public class initData {
 
     public void initTestData() {
         // 기존 데이터 초기화
-        postDocumentService.clear(IndexName.POST.getIndexName());
+        postDocumentService.clear(IndexName.MISSING.getIndexName());
+        postDocumentService.clear(IndexName.FINDING.getIndexName());
     }
 }

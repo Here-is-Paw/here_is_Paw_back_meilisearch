@@ -1,8 +1,9 @@
-package com.ll.hereispaw.domain.search.search.service;
+package com.ll.hereispaw.domain.search.member.service;
 
-import com.ll.hereispaw.domain.search.search.document.PostDocument;
-import com.ll.hereispaw.domain.search.search.dto.response.SearchPostResponseDto;
-import com.ll.hereispaw.domain.search.search.repository.PostDocumentRepository;
+
+import com.ll.hereispaw.domain.search.member.document.MemberDocument;
+import com.ll.hereispaw.domain.search.member.dto.response.SearchMemberResponse;
+import com.ll.hereispaw.domain.search.member.repository.MemberDocumentRepository;
 import com.meilisearch.sdk.SearchRequest;
 import com.meilisearch.sdk.model.SearchResult;
 import com.meilisearch.sdk.model.Searchable;
@@ -20,33 +21,34 @@ import java.util.stream.Collectors;
 @Slf4j
 @Service
 @RequiredArgsConstructor
-public class PostDocumentService {
-    private final PostDocumentRepository postDocumentRepository;
+public class MemberDocumentService {
+    private final MemberDocumentRepository memberDocumentRepository;
 
 
-    public void add(PostDocument postDoc, String indexName) {
-        postDocumentRepository.save(postDoc, indexName);
+    public void add(MemberDocument memDoc, String indexName) {
+        memberDocumentRepository.save(memDoc, indexName);
     }
 
-    public void delete(PostDocument postDoc, String indexName) {
-        postDocumentRepository.delete(postDoc, indexName);
+    public void delete(MemberDocument memDoc, String indexName) {
+        memberDocumentRepository.delete(memDoc, indexName);
     }
 
-    public void update(PostDocument postDoc, String indexName) {
-        postDocumentRepository.update(postDoc, indexName);
+    public void update(MemberDocument memDoc, String indexName) {
+        memberDocumentRepository.update(memDoc, indexName);
     }
 
     public void clear(String indexName) {
-        postDocumentRepository.clear(indexName);
+        memberDocumentRepository.clear(indexName);
     }
 
-    public Page<SearchPostResponseDto> typeAllSearch(String keyword, Pageable pageable) {
+    public Page<SearchMemberResponse> search(String keyword, Pageable pageable) {
         int offset = pageable.getPageNumber() * pageable.getPageSize();
         int limit = pageable.getPageSize();
 
         SearchRequest searchRequest = new SearchRequest(keyword)
                 .setOffset(offset)
-                .setLimit(limit);
+                .setLimit(limit)
+                .setAttributesToSearchOn(new String[]{"nickname"});;
 
 //        // 정렬 적용 (필요한 경우)
 //        addSortToRequest(searchRequest, pageable);
@@ -54,10 +56,10 @@ public class PostDocumentService {
 //        // MeiliSearch 검색 수행
 //        SearchResult meiliResult = index.search(searchRequest);
 
-        Searchable searchable = postDocumentRepository.search("post", searchRequest);
+        Searchable searchable = memberDocumentRepository.search("member", searchRequest);
         SearchResult searchResult = (SearchResult) searchable;
 
-        List<SearchPostResponseDto> content = convertToDto(searchResult.getHits());
+        List<SearchMemberResponse> content = convertToDto(searchResult.getHits());
         log.debug("searchResult {}", searchResult.getEstimatedTotalHits());
         log.debug("getHits {}", searchResult.getHits());
 
@@ -66,39 +68,26 @@ public class PostDocumentService {
         long totalElements = searchResult.getEstimatedTotalHits();
 
         Pageable setPageable = PageRequest.of(pageNumber, pageSize);
-        Page<SearchPostResponseDto> page = new PageImpl<>(content, setPageable, totalElements);
+        Page<SearchMemberResponse> page = new PageImpl<>(content, setPageable, totalElements);
 
         return page;
     }
 
-    private List<SearchPostResponseDto> convertToDto(ArrayList<HashMap<String, Object>> hits) {
+    private List<SearchMemberResponse> convertToDto(ArrayList<HashMap<String, Object>> hits) {
         return hits.stream()
                 .map(this::mapToDto)
                 .filter(Objects::nonNull) // null 결과 필터링
                 .collect(Collectors.toList());
     }
 
-    private SearchPostResponseDto mapToDto(Map<String, Object> hit) {
+    private SearchMemberResponse mapToDto(Map<String, Object> hit) {
         try {
-            SearchPostResponseDto dto = new SearchPostResponseDto();
+            SearchMemberResponse dto = new SearchMemberResponse();
 
             // 필수 필드 설정 (@NonNull 필드)
-            dto.setId(getStringValue(hit, "id"));
-            dto.setBreed(getStringValue(hit, "breed"));
-            dto.setLocation(getStringValue(hit, "location"));
-
-            // 옵션 필드 설정
-            if (hit.containsKey("post_id")) {
-                dto.setPost_id(getLongValue(hit, "post_id"));
-            }
-
-            if (hit.containsKey("type")) {
-                dto.setType(getIntValue(hit, "type"));
-            }
-
-            if (hit.containsKey("etc")) {
-                dto.setEtc(getStringValue(hit, "etc"));
-            }
+            dto.setId(getLongValue(hit, "id"));
+            dto.setNickname(getStringValue(hit, "nickname"));
+            dto.setAvatar(getStringValue(hit, "avatar"));
 
             return dto;
         } catch (Exception e) {

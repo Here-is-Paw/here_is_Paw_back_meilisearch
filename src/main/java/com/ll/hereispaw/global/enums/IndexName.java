@@ -1,10 +1,10 @@
-package com.ll.hereispaw.domain.search.search.document;
+package com.ll.hereispaw.global.enums;
 
 import lombok.Getter;
 
 @Getter
 public enum IndexName {
-    POST("post");
+    MISSING("missing"), FINDING("finding"), MEMBER("member");
 
     private final String indexName; // String 필드 추가
 
