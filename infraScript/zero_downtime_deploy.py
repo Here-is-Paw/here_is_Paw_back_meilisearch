@@ -9,12 +9,12 @@ from typing import Dict, Optional
 
 class ServiceManager:
     # 초기화 함수
-    def __init__(self, socat_port: int = 8060, sleep_duration: int = 3) -> None:
+    def __init__(self, socat_port: int = 8103, sleep_duration: int = 3) -> None:
         self.socat_port: int = socat_port
         self.sleep_duration: int = sleep_duration
         self.services: Dict[str, int] = {
-            'here_is_paw_meilisearch_1': 8061,
-            'here_is_paw_meilisearch_2': 8062
+            'here_is_paw_meilisearch_1': 8014,
+            'here_is_paw_meilisearch_2': 8015
         }
         self.current_name: Optional[str] = None
         self.current_port: Optional[int] = None
@@ -73,7 +73,7 @@ class ServiceManager:
     # Docker 컨테이너를 실행하는 함수
     def _run_container(self, name: str, port: int) -> None:
         os.system(
-            f"docker run -d --name={name} --restart unless-stopped -p {port}:8060 -e TZ=Asia/Seoul -v /dockerProjects/here_is_paw_msa/meilisearch/volumes/gen:/gen --pull always ghcr.io/here-is-paw/here_is_paw_meilisearch")
+            f"docker run -d --name={name} --restart unless-stopped -p {port}:8103 -e TZ=Asia/Seoul -v /dockerProjects/here_is_paw_msa/meilisearch/volumes/gen:/gen --pull always ghcr.io/here-is-paw/here_is_paw_meilisearch")
 ##
     def _switch_port(self) -> None:
         # Socat 포트를 전환하는 함수

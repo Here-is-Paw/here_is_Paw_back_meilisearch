@@ -1,5 +1,5 @@
 server:
-  port: 8060
+  port: 8103
 management:
   endpoints:
     web:
@@ -13,6 +13,6 @@ custom:
   site:
     name: "pawpaw"
     cookieDomain: "${custom.prod.cookieDomain}"
-    meilisearchUrl: "http://110.165.16.61:7700"
+    meilisearchUrl: "http://43.203.126.129:7700"
     frontUrl: "${custom.prod.frontUrl}"
     backUrl: "${custom.prod.backUrl}"
