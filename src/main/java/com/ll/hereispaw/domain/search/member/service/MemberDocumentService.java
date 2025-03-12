@@ -41,14 +41,18 @@ public class MemberDocumentService {
         memberDocumentRepository.clear(indexName);
     }
 
-    public Page<SearchMemberResponse> search(String keyword, Pageable pageable) {
+    public Page<SearchMemberResponse> search(String keyword, Long userId, Pageable pageable) {
         int offset = pageable.getPageNumber() * pageable.getPageSize();
         int limit = pageable.getPageSize();
 
         SearchRequest searchRequest = new SearchRequest(keyword)
                 .setOffset(offset)
                 .setLimit(limit)
-                .setAttributesToSearchOn(new String[]{"nickname"});;
+                .setAttributesToSearchOn(new String[]{"nickname", "id"});
+
+//        if (userId != null) {
+//            searchRequest.setFilter(new String[]{"id != " + userId});
+//        }
 
 //        // 정렬 적용 (필요한 경우)
 //        addSortToRequest(searchRequest, pageable);

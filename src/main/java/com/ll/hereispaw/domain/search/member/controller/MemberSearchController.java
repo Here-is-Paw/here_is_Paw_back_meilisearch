@@ -8,10 +8,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @Slf4j
 @RestController
@@ -20,10 +17,13 @@ import org.springframework.web.bind.annotation.RestController;
 public class MemberSearchController {
     private final MemberDocumentService memberDocumentService;
 
-    @GetMapping
+    @GetMapping("/{userId}")
     public GlobalResponse<Page<SearchMemberResponse>> search(
             @RequestParam("kw") String keyword,
+            @PathVariable("userId") Long userId,
             @PageableDefault(size = 10) Pageable pageable) {
-        return GlobalResponse.success(memberDocumentService.search(keyword, pageable));
+        log.debug("userId: {}", userId);
+
+        return GlobalResponse.success(memberDocumentService.search(keyword, userId, pageable));
     }
 }
