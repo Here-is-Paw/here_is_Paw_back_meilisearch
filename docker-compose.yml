@@ -1,12 +1,12 @@
-version: '3.8'  # 사용하는 Docker Compose 파일 버전
-services:
-  meilisearch:
-    image: getmeili/meilisearch:v1.7  # 사용할 이미지
-    container_name: meilisearch-1  # 컨테이너 이름
-    ports:
-      - "7700:7700"  # 호스트와 컨테이너의 포트 매핑
-    volumes:
-      - "./meili_data:/meili_data"  # 호스트와 컨테이너의 볼륨 매핑
-    environment:
-      MEILI_ENV: development  # 환경 변수 설정
-    restart: unless-stopped  # 컨테이너 자동 재시작 정책
+#version: '3.8'  # 사용하는 Docker Compose 파일 버전
+#services:
+#  meilisearch:
+#    image: getmeili/meilisearch:v1.7  # 사용할 이미지
+#    container_name: meilisearch-1  # 컨테이너 이름
+#    ports:
+#      - "7700:7700"  # 호스트와 컨테이너의 포트 매핑
+#    volumes:
+#      - "./meili_data:/meili_data"  # 호스트와 컨테이너의 볼륨 매핑
+#    environment:
+#      MEILI_ENV: development  # 환경 변수 설정
+#    restart: unless-stopped  # 컨테이너 자동 재시작 정책
