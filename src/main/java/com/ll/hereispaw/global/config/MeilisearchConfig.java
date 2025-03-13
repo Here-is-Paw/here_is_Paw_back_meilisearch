@@ -45,6 +45,7 @@ public class MeilisearchConfig {
                 client.createIndex(IndexName.MISSING.getIndexName());
                 client.createIndex(IndexName.FINDING.getIndexName());
                 client.createIndex(IndexName.MEMBER.getIndexName());
+
                 missingIndex = client.index(IndexName.MISSING.getIndexName());
                 findingIndex = client.index(IndexName.FINDING.getIndexName());
                 memberIndex = client.index(IndexName.MEMBER.getIndexName());
@@ -53,15 +54,19 @@ public class MeilisearchConfig {
             HashMap<String, Integer> typoSettings = new HashMap<>();
             typoSettings.put("oneTypo", 40);
             typoSettings.put("twoTypos", 50);
-
             TypoTolerance typoTolerance = new TypoTolerance().setMinWordSizeForTypos(typoSettings);
-            Settings settings = new Settings().setTypoTolerance(typoTolerance);
 
-//            settings.setRankingRules(new String[]{"words", "typo", "proximity", "attribute", "sort", "exactness"});
+            Settings postSettings = new Settings()
+                    .setTypoTolerance(typoTolerance)
+                    .setSortableAttributes(new String[]{"createdDate"});
+            missingIndex.updateSettings(postSettings);
+            findingIndex.updateSettings(postSettings);
 
-            missingIndex.updateSettings(settings);
-            findingIndex.updateSettings(settings);
-            memberIndex.updateSettings(settings);
+            Settings memberSettings = new Settings()
+                    .setTypoTolerance(typoTolerance)
+                    .setFilterableAttributes(new String[]{"id"});
+
+            memberIndex.updateSettings(memberSettings);
             log.debug("📌 메일리서치 세팅 적용 완료");
 
         } catch (Exception e) {

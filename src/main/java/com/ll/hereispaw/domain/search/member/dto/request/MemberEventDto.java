@@ -12,9 +12,9 @@ public class MemberEventDto {
     @NonNull
     private Long id;
 
-    @NonNull
     private String avatar;
 
+    @NonNull
     private String nickname;
 
     private int state;

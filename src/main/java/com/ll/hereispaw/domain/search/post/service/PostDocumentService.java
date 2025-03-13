@@ -1,18 +1,15 @@
 package com.ll.hereispaw.domain.search.post.service;
 
-import com.ll.hereispaw.global.enums.IndexName;
 import com.ll.hereispaw.domain.search.post.document.PostDocument;
 import com.ll.hereispaw.domain.search.post.dto.response.SearchPostResponseDto;
 import com.ll.hereispaw.domain.search.post.repository.PostDocumentRepository;
+import com.ll.hereispaw.global.enums.IndexName;
 import com.meilisearch.sdk.SearchRequest;
 import com.meilisearch.sdk.model.SearchResult;
 import com.meilisearch.sdk.model.Searchable;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageImpl;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.*;
 import org.springframework.stereotype.Service;
 
 import java.util.*;
@@ -50,12 +47,7 @@ public class PostDocumentService {
                 .setLimit(limit)
                 .setAttributesToSearchOn(getAttributes(genre));
 
-//        // 정렬 적용 (필요한 경우)
-//        addSortToRequest(searchRequest, pageable);
-//
-//        // MeiliSearch 검색 수행
-//        SearchResult meiliResult = index.search(searchRequest);
-        return search(searchRequest, IndexName.MISSING.getIndexName());
+        return search(addSortToRequest(searchRequest, pageable), IndexName.MISSING.getIndexName());
     }
 
     public Page<SearchPostResponseDto> searchFinding(String genre, String keyword, Pageable pageable) {
@@ -69,12 +61,7 @@ public class PostDocumentService {
                 .setLimit(limit)
                 .setAttributesToSearchOn(getAttributes(genre));
 
-//        // 정렬 적용 (필요한 경우)
-//        addSortToRequest(searchRequest, pageable);
-//
-//        // MeiliSearch 검색 수행
-//        SearchResult meiliResult = index.search(searchRequest);
-        return search(searchRequest, IndexName.FINDING.getIndexName());
+        return search(addSortToRequest(searchRequest, pageable), IndexName.FINDING.getIndexName());
     }
 
     private String[] getAttributes(String genre) {
@@ -83,6 +70,25 @@ public class PostDocumentService {
             case "지역" -> new String[]{"location"};
             default -> new String[]{"location", "breed"};
         };
+    }
+
+    private SearchRequest addSortToRequest(SearchRequest searchRequest, Pageable pageable) {
+        // 기본 정렬(createdDate 내림차순) 또는 요청된 정렬 적용
+        if (pageable.getSort().isUnsorted()) {
+
+            // 정렬이 지정되지 않은 경우 기본적으로 createdDate 내림차순(최신순)
+            searchRequest.setSort(new String[]{"createdDate:desc"});
+        } else {
+            List<String> sortCriteria = new ArrayList<>();
+
+            for (Sort.Order order : pageable.getSort()) {
+                String direction = order.getDirection().isAscending() ? "asc" : "desc";
+                sortCriteria.add(order.getProperty() + ":" + direction);
+            }
+
+            return searchRequest.setSort(sortCriteria.toArray(new String[0]));
+        }
+        return searchRequest;
     }
 
     private Page<SearchPostResponseDto> search(SearchRequest searchRequest, String indexName) {

@@ -5,6 +5,8 @@ import lombok.Data;
 import lombok.NonNull;
 import lombok.extern.slf4j.Slf4j;
 
+import java.time.LocalDateTime;
+
 @Slf4j
 @Data
 public class PostDocument{
@@ -24,6 +26,8 @@ public class PostDocument{
 
     private String etc;
 
+    private LocalDateTime createdDate;
+
     public PostDocument(PostEventDto postEventDto) {
         this.id = postEventDto.getId();
         this.pathUrl = postEventDto.getPathUrl();
@@ -32,5 +36,6 @@ public class PostDocument{
         this.y = postEventDto.getY();
         this.location = postEventDto.getLocation();
         this.etc = postEventDto.getEtc();
+        this.createdDate = postEventDto.getCreatedDate();
     }
 }

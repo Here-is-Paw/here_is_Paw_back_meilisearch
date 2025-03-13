@@ -45,10 +45,12 @@ public class MemberDocumentService {
         int offset = pageable.getPageNumber() * pageable.getPageSize();
         int limit = pageable.getPageSize();
 
-        SearchRequest searchRequest = new SearchRequest(keyword)
-                .setOffset(offset)
-                .setLimit(limit)
-                .setAttributesToSearchOn(new String[]{"nickname", "id"});
+        SearchRequest searchRequest = SearchRequest.builder()
+                .q(keyword)
+                .attributesToSearchOn(new String[]{"nickname"})
+                .offset(offset).limit(limit)
+                .filter(new String[]{"id != " + userId})
+                .build();
 
 //        if (userId != null) {
 //            searchRequest.setFilter(new String[]{"id != " + userId});
@@ -64,8 +66,6 @@ public class MemberDocumentService {
         SearchResult searchResult = (SearchResult) searchable;
 
         List<SearchMemberResponse> content = convertToDto(searchResult.getHits());
-        log.debug("searchResult {}", searchResult.getEstimatedTotalHits());
-        log.debug("getHits {}", searchResult.getHits());
 
         int pageNumber = searchResult.getOffset() / searchResult.getLimit();
         int pageSize = searchResult.getLimit();

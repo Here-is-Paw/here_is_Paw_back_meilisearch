@@ -12,8 +12,8 @@ public class SearchMemberResponse {
     @NonNull
     private Long id;
 
-    @NonNull
     private String avatar;
 
+    @NonNull
     private String nickname;
 }

@@ -5,6 +5,8 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.NonNull;
 
+import java.time.LocalDateTime;
+
 @Data
 @NoArgsConstructor  // 기본 생성자 추가
 @AllArgsConstructor // 모든 필드가 있는 생성자 추가 (필수는 아님)
@@ -31,4 +33,6 @@ public class PostEventDto {
     private int state;
 
     private String etc;
+
+    private LocalDateTime createdDate;
 }
