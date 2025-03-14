@@ -100,8 +100,8 @@ public class PostDocumentService {
         SearchResult searchResult = (SearchResult) searchable;
 
         List<SearchPostResponseDto> content = convertToDto(searchResult.getHits());
-        log.debug("searchResult {}", searchResult.getEstimatedTotalHits());
         log.debug("getHits {}", searchResult.getHits());
+        log.debug("content: {}", content);
 
         int pageNumber = searchResult.getOffset() / searchResult.getLimit();
         int pageSize = searchResult.getLimit();
@@ -129,7 +129,7 @@ public class PostDocumentService {
             dto.setLocation(getStringValue(hit, "location"));
             dto.setPathUrl(getStringValue(hit, "pathUrl"));
             dto.setX(getDoubleValue(hit, "x"));
-            dto.setX(getDoubleValue(hit, "y"));
+            dto.setY(getDoubleValue(hit, "y"));
             dto.setEtc(getStringValue(hit, "etc"));
 
             return dto;
@@ -175,7 +175,7 @@ public class PostDocumentService {
         Object value = hit.get(key);
         if (value == null) return 0;
         if (value instanceof Number) {
-            return ((Number) value).intValue();
+            return ((Number) value).doubleValue();
         }
         try {
             return Double.parseDouble(value.toString());
