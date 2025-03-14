@@ -19,7 +19,7 @@ public class initData {
     @PostConstruct
     public void init() {
         log.info("테스트 데이터 초기화 시작");
-        initTestData();
+//        initTestData();
         log.info("테스트 데이터 초기화 완료");
     }
 
@@ -27,5 +27,6 @@ public class initData {
         // 기존 데이터 초기화
         postDocumentService.clear(IndexName.MISSING.getIndexName());
         postDocumentService.clear(IndexName.FINDING.getIndexName());
+        postDocumentService.clear(IndexName.MEMBER.getIndexName());
     }
 }

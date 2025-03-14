@@ -65,6 +65,10 @@ public class PostDocumentService {
     }
 
     private String[] getAttributes(String genre) {
+        if (genre == null) {
+            return new String[]{"location", "breed"}; // null인 경우 기본값 반환
+        }
+
         return switch (genre) {
             case "품종" -> new String[]{"breed"};
             case "지역" -> new String[]{"location"};
