@@ -19,7 +19,7 @@ public class initData {
     @PostConstruct
     public void init() {
         log.info("테스트 데이터 초기화 시작");
-//        initTestData();
+        initTestData();
         log.info("테스트 데이터 초기화 완료");
     }
 
